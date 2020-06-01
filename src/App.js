@@ -7,26 +7,41 @@ import Navigation from './components/Navigation';
 import Products from './components/Products';
 import ShoppingCart from './components/ShoppingCart';
 
+import { ProductContext } from './contexts/ProductContext'
+import { CartContext } from './contexts/CartContext'
+
 function App() {
 	const [products] = useState(data);
-	const [cart, setCart] = useState([]);
+	//One data source 
+	const [cart, setCart] = useState([products]);
+	//Changeable data set
 
-	const addItem = item => {
-		// add the given item to the cart
+	const addItem = (item) => {
+		setCart([...cart, item]);
 	};
+	const removeItem = (item) => {
+		setCart([...cart, item.filter( item => item !== item)]);
+	};
+
 
 	return (
 		<div className="App">
-			<Navigation cart={cart} />
-
+			<ProductContext.Provider value={{ products, addItem }}>
+			<CartContext.Provider value={cart}>
+			<Navigation />
+				{/* //Value is data ready to be consumed by components */}
 			{/* Routes */}
 			<Route exact path="/">
-				<Products products={products} addItem={addItem} />
+				<Products />
+				{/* <Products products={products} addItem={addItem} /> no longer need to pass props*/}
 			</Route>
 
 			<Route path="/cart">
-				<ShoppingCart cart={cart} />
+				<ShoppingCart />
 			</Route>
+			</CartContext.Provider>
+			</ProductContext.Provider>
+
 		</div>
 	);
 }

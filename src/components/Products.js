@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ProductContext } from '../contexts/ProductContext'
 
 // Components
 import Product from './Product';
 
-const Products = props => {
+const Products = () => {
+	const { products, addItem, removeItem } = useContext(ProductContext)
+	// to understand further - https://github.com/LambdaSchool/react-shopping-cart/blob/master/README.md step 4
 	return (
 		<div className="products-container">
-			{props.products.map(product => (
+			{products.map(product => (
 				<Product
 					key={product.id}
 					product={product}
-					addItem={props.addItem}
+					addItem={addItem}
 				/>
 			))}
 		</div>
